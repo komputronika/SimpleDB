@@ -1,6 +1,6 @@
-# Simple MySQLi Function #
+# Simple MySQLi Functions #
 
-Simple MySQLi function is MySQLi wrapper to handle common database queries and operations.
+Simple MySQLi functions is MySQLi wrapper to handle common database queries and operations.
 
 **Include file:**
 ```
@@ -15,7 +15,7 @@ db_connect("localhost","user","pass","student");
 ```
 
 
-**Get data from table:**
+**Get records example:**
 ```
 $q = db_query("select * from students");
 while ($d = db_fetch($q)) {
@@ -23,6 +23,21 @@ while ($d = db_fetch($q)) {
 }
 ```
 
+**Insert example:**
+```
+$a = array();
+$a['name'] = db_filter($_POST["name"]);
+$a['age']  = db_filter($_POST["age"]);
 
+db_insert("student", $a);
+```
 
+**Update example:**
+```
+$a = array();
+$a['name'] = "John Doe";
+$a['age']  = 21;
+
+db_update("student", $a, "id=10");
+```
 
