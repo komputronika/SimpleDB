@@ -1,13 +1,14 @@
-# Simple MySQLi Functions #
+# SimpleDB #
 
-Simple MySQLi functions is MySQLi wrapper to handle common database queries and operations.
+SimpleDB is MySQLi wrapper to handle common database queries and operations.
 
 **Include file:**
 ```php
 <?php
 require("mysqlidb.php");
-```
 
+//...
+```
 
 **Connect to database:**
 ```php
