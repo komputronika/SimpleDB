@@ -40,12 +40,12 @@ $a['age']  = 21;
 db_update("student", $a, "id=10");
 ```
 
-Delete example:
+**Delete example:**
 ```php
 db_delete("student", "id=5");
 ```
 
-Get last insert id:
+**Get last insert id:**
 ```php
 //...
 db_insert("student", $a);
