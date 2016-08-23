@@ -2,13 +2,16 @@
 require("mysqlidb.php")
 
 $before = microtime(true);
+
 db_connect("localhost", "root", "", "hrd");
-$q = db_query("select * from karyawan");
+
+$q = db_query("select * from employee");
 while ($d = db_fetch($q)) {
     print "<pre>";
     print_r($d);
     print "</pre>";
 }
+
 $after = microtime(true);
 echo ($after-$before) . " ms";
 ?>
