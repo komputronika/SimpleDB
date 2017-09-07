@@ -3,9 +3,9 @@ require("mysqlidb.php");
 
 $before = microtime(true);
 
-db_connect("localhost", "root", "", "hrd");
+db_connect("localhost", "root", "", "sispadu2018");
 
-$q = db_query("select * from employee");
+$q = db_query("select * from siswa");
 while ($d = db_fetch($q)) {
     print "<pre>";
     print_r($d);

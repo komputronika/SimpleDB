@@ -125,6 +125,10 @@ function db_fetch($q, $array=false) {
 //--------------------------------------
 // $status = db_insert( table, array )
 //--------------------------------------
+function db_insert_array($table, $array) {
+    db_insert($table, $array);
+}
+
 function db_insert($table, $array) {
     $field  = "(";
     $values = "(";
@@ -144,6 +148,10 @@ function db_insert($table, $array) {
 //--------------------------------------
 // $status = db_update( "siswa", $a, "siswa_id = '37'" )
 //--------------------------------------
+function db_update_array($table, $array, $cond="") {
+    db_update($table, $array, $cond);
+}
+
 function db_update($table, $array, $cond="") {
     $sets = "";
     foreach ($array as $key=>$val){
