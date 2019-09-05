@@ -311,4 +311,32 @@ function db_one($str){
     return $d;
 }
 
-?>
+
+function halt($str){
+    echo "<div class='db-error'><h1>DATABASE ERROR:</h1><p>$str</p></div>";
+    die();
+}
+
+function now($format="Y-m-d H:i:s")
+{
+    // $d = db_fetch(db_query("SELECT UNIX_TIMESTAMP() AS timestamp"));
+    // $time = $d->timestamp + (7 * 3600);
+    $ret  = date($format);
+    return $ret;
+}
+
+function send_email( $from, $to, $subject, $body, $debug=false ){
+    $header  = "From: $from\r\n";
+    $header .= "Disposition-Notification-To: $from\r\n";
+
+    if ($debug==false) {
+        return mail( $to, $subject, $body, $header );
+    } else {
+        echo "<hr size='1' noshade><pre style='font-family:courier;font-size:11px;'>";
+        echo "TO     : ".htmlspecialchars($to)."<br>";
+        echo "TOPIC  : ".htmlspecialchars($subject)."<br>";
+        echo "HEADER : ".htmlspecialchars($header);
+        echo "<hr size='1' noshade>".wordwrap(htmlspecialchars($body), 60, "\n");
+        echo "<hr size='1' noshade><br></pre>";
+    }
+}
