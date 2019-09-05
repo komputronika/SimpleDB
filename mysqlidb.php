@@ -115,11 +115,18 @@ function db_get_row($str) {
 // $d = db_fetch( resource, array )
 //--------------------------------------
 function db_fetch($q, $array=false) {
-    $d = ($array) ? $q->fetch_row() : $q->fetch_object();
+    $d = ($array) ? $q->fetch_array(MYSQLI_ASSOC) : $q->fetch_object();
     if (!empty($GLOBALS["_conn"]->error)) {
         db_error("".$GLOBALS["_conn"]->error);
     }
     return $d;
+}
+
+//--------------------------------------
+// $d = db_fetch_array( resource )
+//--------------------------------------
+function db_fetch_array($q) {
+    return db_fetch($q, true);
 }
 
 //--------------------------------------
@@ -172,15 +179,15 @@ function db_delete($table, $cond="") {
 }
 
 //--------------------------------------
-// $n = db_num_rows( resource )
+// $n = db_num_rows( sql )
 //--------------------------------------
-function db_num_rows($q) {
-    //try {
-    //$q = db_query($str);
-    $n = $q->num_rows;
-    //} catch(Exception $e) {
-    //    db_error("".$e->getMessage()."<br>");
-    //}
+function db_num_rows( $str ) {
+    try {
+        $q = db_query($str);
+        $n = $q->num_rows;
+    } catch(Exception $e) {
+        db_error("".$e->getMessage()."<br>");
+    }
     if (!empty($GLOBALS["_conn"]->error)) {
         db_error("".$GLOBALS["_conn"]->error);
     }
@@ -234,6 +241,74 @@ function db_list_fields($table) {
 function db_error($str) {
     echo "<div class='db-error'><h1>DATABASE ERROR:</h1><p>$str</p></div>";
     die();
+}
+
+// New functions 05-September-2019
+
+//--------------------------------------
+// db_insert_update( table, condition, data )
+//--------------------------------------
+function db_insert_update($table, $where, $array) {
+    $sql = "select * from $table where $where";
+    $n = db_num_rows($sql);
+    if ($n==0) {
+        db_insert_array($table, $array);
+    } else {
+        db_update_array($table, $array, $where);
+    }
+    if (!empty($GLOBALS["_conn"]->error)) {
+        db_error("".$GLOBALS["_conn"]->error);
+    }
+}
+
+//--------------------------------------
+// value_lookup( id, table, column id, column name)
+//--------------------------------------
+function value_lookup($id, $table, $col_id, $col_name) {
+    $q = db_query("select $col_id, $col_name from $table where $col_id='$id'");
+    if ($q->num_rows) {
+        $d = db_fetch_array($q);
+        return $d["$col_name"];
+    } else {
+        return null;
+    }
+}
+
+//--------------------------------------
+// select_lookup( select name, table, column id, column name, default, extra html tag)
+//--------------------------------------
+function select_lookup($name, $table, $col_id, $col_name, $default, $string="") {
+    echo "<select name='$name' id='$name' $string>";
+    $q = db_query("select $col_id,$col_name from $table");
+    while ($d = db_fetch_array($q)) {
+        $sel = stripslashes($default) == $d["$col_id"] ? " selected" : "";
+        echo "<option value='".$d["$col_id"]."' $sel>".$d["$col_name"]."</option>";
+    }
+    echo "</select>";
+}
+
+//--------------------------------------
+// query( sql )
+//--------------------------------------
+function query($sql) {
+    $q = db_query($sql);
+    $array = array();
+    while ($d = db_fetch($q)) {
+        $array[]=$d;
+    }
+    return $array;
+}
+
+//--------------------------------------
+// db_one( sql )
+//--------------------------------------
+function db_one($str){
+    $q = db_query($str);
+    $d = db_fetch($q);
+    if (!empty($GLOBALS["_conn"]->error)) {
+        db_error("".$GLOBALS["_conn"]->error);
+    }
+    return $d;
 }
 
 ?>
