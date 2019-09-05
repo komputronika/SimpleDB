@@ -31,7 +31,7 @@ db_update("student", $a, "id=10");
 // db_connect( host, user, pass, database name)
 //--------------------------------------
 function db_connect($host, $user, $pass, $name) {
-    $GLOBALS["_conn"] = new mysql_connect( $host, $user, $pass, $name );
+    $GLOBALS["_conn"] = new mysqli( $host, $user, $pass, $name );
     if (!empty($GLOBALS["_conn"]->error)) {
         db_error("".$GLOBALS["_conn"]->error);
     }
